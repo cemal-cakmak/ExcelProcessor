@@ -1,0 +1,610 @@
+@model ExcelData
+@{
+    ViewData["Title"] = "Ana Sayfa";
+}
+
+<!-- 1. Excel Şablonu İndirme Bölümü -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card shadow-sm border-0" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <div class="card-body text-white p-4">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-white bg-opacity-25 rounded-circle p-3 me-3">
+                                <i class="fas fa-download fa-2x text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="mb-1 fw-bold">Adım 1: Excel Şablonu</h3>
+                                <p class="mb-0 opacity-75">Önce şablonu indirin ve verilerinizi girin</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white bg-opacity-15 rounded p-3 mb-3">
+                            <div class="row text-center">
+                                <div class="col-3">
+                                    <i class="fas fa-hashtag text-warning"></i>
+                                    <small class="d-block">Soru No</small>
+                                </div>
+                                <div class="col-3">
+                                    <i class="fas fa-question-circle text-info"></i>
+                                    <small class="d-block">Sorular</small>
+                                </div>
+                                <div class="col-3">
+                                    <i class="fas fa-edit text-success"></i>
+                                    <small class="d-block">Cevaplar</small>
+                                </div>
+                                <div class="col-3">
+                                    <i class="fas fa-check-circle text-light"></i>
+                                    <small class="d-block">Evet/Hayır</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 text-center">
+                        <a href="/Home/DownloadTemplate" class="btn btn-light btn-lg px-4 py-3 shadow">
+                            <i class="fas fa-download me-2 text-primary"></i>
+                            <span class="fw-bold text-dark">Şablonu İndir</span>
+                        </a>
+                        <p class="mt-2 mb-0 small opacity-75">
+                            <i class="fas fa-file-excel me-1"></i>Excel formatında
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 2. Excel Dosyası Yükleme Bölümü -->
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow-sm border-0" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+            <div class="card-body text-white p-4">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="bg-white bg-opacity-25 rounded-circle p-3 me-3">
+                        <i class="fas fa-upload fa-2x text-white"></i>
+                    </div>
+                    <div>
+                        <h3 class="mb-1 fw-bold">Adım 2: Excel Dosyası Yükleyin</h3>
+                        <p class="mb-0 opacity-75">Doldurduğunuz şablonu buraya yükleyin</p>
+                    </div>
+                </div>
+                
+                @if (TempData["Error"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i>@TempData["Error"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+                
+                <div class="bg-white rounded p-4">
+                
+                    <form asp-action="UploadFile" method="post" enctype="multipart/form-data" id="uploadForm">
+                        <div class="row align-items-end">
+                            <div class="col-md-8">
+                                <label for="file" class="form-label text-dark fw-semibold">
+                                    <i class="fas fa-file-excel text-success me-2"></i>Excel Dosyası Seçin
+                                </label>
+                                <input type="file" class="form-control form-control-lg border-2" id="file" name="file" accept=".xlsx,.xls" required 
+                                       style="border-color: #dee2e6; border-radius: 12px;">
+                                <small class="text-muted">
+                                    <i class="fas fa-info-circle me-1"></i>Desteklenen formatlar: .xlsx, .xls (Maks. 10MB)
+                                </small>
+                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-success btn-lg w-100 shadow-sm" 
+                                        style="border-radius: 12px; background: linear-gradient(45deg, #28a745, #20c997);">
+                                    <i class="fas fa-cloud-upload-alt me-2"></i>Dosyayı Yükle
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (Model.Worksheets.Any())
+{
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card shadow-sm border-0" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                <div class="card-body text-white p-4">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="bg-white bg-opacity-25 rounded-circle p-3 me-3">
+                            <i class="fas fa-table fa-2x text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="mb-1 fw-bold">Adım 3: Çalışma Sayfası Seçin</h3>
+                            <p class="mb-0 opacity-75">Excel dosyanızdan uygun çalışma sayfasını seçin</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded p-4">
+                        <div class="row align-items-end">
+                            <div class="col-md-8">
+                                <label for="worksheetSelect" class="form-label text-dark fw-semibold">
+                                    <i class="fas fa-file-alt text-warning me-2"></i>Çalışma Sayfası
+                                </label>
+                                <select id="worksheetSelect" class="form-select form-select-lg border-2" 
+                                        style="border-color: #dee2e6; border-radius: 12px;">
+                                    <option value="">-- Çalışma sayfası seçiniz --</option>
+                                    @foreach (var worksheet in Model.Worksheets)
+                                    {
+                                        <option value="@worksheet">📋 @worksheet</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <button type="button" id="loadDataBtn" class="btn btn-warning btn-lg w-100 shadow-sm" disabled
+                                        style="border-radius: 12px; background: linear-gradient(45deg, #ffc107, #ff8c00);">
+                                    <i class="fas fa-eye me-2"></i>Verileri Göster
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div id="dataSection" class="row mt-4" style="display: none;">
+    <div class="col-12">
+        <div class="card shadow-sm border-0" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
+            <div class="card-body text-dark p-4">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-white bg-opacity-50 rounded-circle p-3 me-3">
+                            <i class="fas fa-database fa-2x text-primary"></i>
+                        </div>
+                        <div>
+                            <h3 class="mb-1 fw-bold text-dark">Adım 4: Excel Verileri</h3>
+                            <p class="mb-0 text-muted">Verilerinizi kontrol edin ve MEB'e aktarın</p>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex gap-2">
+                        <button type="button" id="showScriptBtn" class="btn btn-outline-warning btn-lg shadow-sm" style="display: none; border-radius: 12px;">
+                            <i class="fas fa-code me-2"></i>📜 SCRIPT
+                        </button>
+                        <button type="button" id="copyToClipboardBtn" class="btn btn-outline-success btn-lg shadow-sm" style="display: none; border-radius: 12px;">
+                            <i class="fas fa-copy me-2"></i>📋 KOPYALA
+                        </button>
+                        <button type="button" id="setupMappingBtn" class="btn btn-outline-info btn-lg shadow-sm" style="display: none; border-radius: 12px;">
+                            <i class="fas fa-cogs me-2"></i>⚙️ AYARLAR
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded shadow-sm p-3">
+                    <div class="table-responsive">
+                        <table id="dataTable" class="table table-striped table-hover mb-0">
+                            <thead class="table-dark"></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="mappingSection" class="row mt-4" style="display: none;">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4><i class="fas fa-cogs me-2"></i>Eşleştirme Ayarları</h4>
+            </div>
+            <div class="card-body">
+                <div id="mappingContainer">
+                    <!-- Mapping content will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script Code Modal -->
+<div class="modal fade" id="scriptModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-code me-2"></i>📜 1. Adım: Script Kodu
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning">
+                    <h6><i class="fas fa-exclamation-triangle me-2"></i>Önemli Talimatlar:</h6>
+                    <ol>
+                        <li><strong>MEB sayfasını açın</strong> (Bölüm 1, 2-8 hangi olursa olsun)</li>
+                        <li><strong>F12 tuşuna basın</strong> → Console sekmesine gidin</li>
+                        <li><strong>Aşağıdaki kodu kopyalayın</strong> ve Console'a yapıştırın</li>
+                        <li><strong>Enter tuşuna basın</strong> → Script yüklenecek</li>
+                        <li><strong>Sonra 2. adıma geçin</strong> (KOPYALA butonuna basın)</li>
+                    </ol>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="scriptCode" class="form-label"><strong>Script Kodu:</strong></label>
+                    <textarea id="scriptCode" class="form-control" rows="8" readonly style="font-family: monospace; background: #f8f9fa;"></textarea>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <button type="button" class="btn btn-primary w-100" onclick="copyScriptCode()">
+                            <i class="fas fa-copy me-2"></i>Kodu Kopyala
+                        </button>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="button" class="btn btn-success w-100" onclick="openMEBPage()">
+                            <i class="fas fa-external-link-alt me-2"></i>MEB Sayfasını Aç
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bookmarklet Modal -->
+<div class="modal fade" id="bookmarkletModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-bookmark me-2"></i>Bookmarklet Hazır!
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info">
+                    <h6><i class="fas fa-info-circle me-2"></i>Nasıl Kullanılır:</h6>
+                    <ol>
+                        <li>Aşağıdaki kodu kopyalayın</li>
+                        <li>Browser'ınızda yeni bir bookmark oluşturun</li>
+                        <li>URL kısmına bu kodu yapıştırın</li>
+                        <li>Hedef web sayfasında bookmark'a tıklayın</li>
+                    </ol>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="bookmarkletCode" class="form-label"><strong>Bookmarklet Kodu:</strong></label>
+                    <textarea id="bookmarkletCode" class="form-control" rows="10" readonly style="font-family: monospace;"></textarea>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <button type="button" class="btn btn-primary w-100" onclick="copyScript()">
+                            <i class="fas fa-copy me-2"></i>Kodu Kopyala
+                        </button>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="button" class="btn btn-success w-100" onclick="openMEBPage()">
+                            <i class="fas fa-external-link-alt me-2"></i>MEB Sayfasını Aç
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <div class="alert alert-warning">
+                        <h6><i class="fas fa-exclamation-triangle me-2"></i>Önemli Notlar:</h6>
+                        <ul class="mb-0">
+                            <li><strong>Bu script bir kez yapıştırılır</strong> - sayfa yenilenene kadar çalışır durumda kalır</li>
+                            <li><strong>Güvenli:</strong> Sadece form doldurma işlemi yapar, başka hiçbir şey değiştirmez</li>
+                            <li><strong>Otomatik:</strong> Hangi bölümde olduğunuzu algılar ve uygun alanları doldurur</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/site.js"></script>
+    <script>
+        let currentData = [];
+        let currentHeaders = [];
+
+        $(document).ready(function() {
+            // Worksheet selection handler
+            $('#worksheetSelect').change(function() {
+                const selectedWorksheet = $(this).val();
+                $('#loadDataBtn').prop('disabled', !selectedWorksheet);
+            });
+
+            // Load data button handler
+            $('#loadDataBtn').click(function() {
+                const selectedWorksheet = $('#worksheetSelect').val();
+                if (!selectedWorksheet) {
+                    alert('Lütfen bir çalışma sayfası seçin!');
+                    return;
+                }
+                loadSheetData(selectedWorksheet);
+            });
+
+            // Setup mapping button handler
+            $('#setupMappingBtn').click(function() {
+                setupMapping();
+            });
+
+            // Script button handler
+            $('#showScriptBtn').click(function() {
+                showScriptCode();
+            });
+
+            // Copy to clipboard button handler
+            $('#copyToClipboardBtn').click(function() {
+                copyDataToClipboard();
+            });
+        });
+
+        function loadSheetData(worksheetName) {
+            console.log('Loading worksheet:', worksheetName);
+            
+            $.post('/Home/GetWorksheetData', { worksheetName: worksheetName })
+                .done(function(response) {
+                    console.log('Response received:', response);
+                    
+                    if (response.success) {
+                        currentData = response.data;
+                        currentHeaders = response.headers;
+                        displayData(response.data, response.headers);
+                        $('#dataSection').show();
+                        
+                        // Show action buttons
+                        $('#showScriptBtn').show();
+                        $('#copyToClipboardBtn').show();
+                        $('#setupMappingBtn').show();
+                        
+                        // Scroll to data section
+                        document.getElementById('dataSection').scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                        alert('Hata: ' + response.message);
+                    }
+                })
+                .fail(function(xhr, status, error) {
+                    console.error('AJAX Error:', status, error);
+                    alert('Veri yüklenirken hata oluştu: ' + error);
+                });
+        }
+
+        function displayData(data, headers) {
+            console.log('Displaying data:', data.length, 'rows');
+            console.log('Headers:', headers);
+            console.log('Sample row:', data[0]);
+            
+            // Destroy existing DataTable if exists
+            if ($.fn.DataTable.isDataTable('#dataTable')) {
+                $('#dataTable').DataTable().destroy();
+            }
+            
+            // Clear table
+            $('#dataTable').empty();
+            
+            if (data.length > 0) {
+                // Create table structure
+                let tableHtml = '<thead class="table-dark"><tr>';
+                headers.forEach(header => {
+                    tableHtml += `<th>${header}</th>`;
+                });
+                tableHtml += '</tr></thead><tbody>';
+                
+                // Add data rows
+                data.forEach(row => {
+                    tableHtml += '<tr>';
+                    headers.forEach(header => {
+                        const cellValue = row[header] || '';
+                        tableHtml += `<td>${cellValue}</td>`;
+                    });
+                    tableHtml += '</tr>';
+                });
+                tableHtml += '</tbody>';
+                
+                // Set table content
+                $('#dataTable').html(tableHtml);
+                
+                // Initialize DataTable - Basit ve Düzgün
+                $('#dataTable').DataTable({
+                    pageLength: 25,
+                    searching: true,
+                    ordering: true,
+                    paging: true,
+                    info: true,
+                    language: {
+                        "sSearch": "Ara:",
+                        "sLengthMenu": "Sayfada _MENU_ kayıt göster",
+                        "sInfo": "_TOTAL_ kayıttan _START_ - _END_ arası",
+                        "sInfoEmpty": "Kayıt yok",
+                        "sEmptyTable": "Tabloda veri yok",
+                        "oPaginate": {
+                            "sNext": "Sonraki",
+                            "sPrevious": "Önceki"
+                        }
+                    }
+                });
+                
+                console.log('✅ DataTable initialized successfully');
+            } else {
+                $('#dataTable').html('<tbody><tr><td colspan="100%" class="text-center">Veri bulunamadı</td></tr></tbody>');
+            }
+        }
+
+        function setupMapping() {
+            if (!currentData || currentData.length === 0) {
+                alert('Önce Excel verilerini yükleyin!');
+                return;
+            }
+
+            const columnNames = Object.keys(currentData[0]);
+            let stats = {
+                totalRows: currentData.length,
+                columnCount: columnNames.length,
+                columns: {},
+                emptyAnswers: 0,
+                filledAnswers: 0
+            };
+
+            // DataTable otomatik sıra eklediği için 4. sütunu al (index 3)
+            const cevapColumnName = columnNames[3]; // 4. sütun (index 3) - DataTable kayması düzeltmesi
+            console.log('📋 Cevap sütunu (DataTable kayması düzeltmesi):', cevapColumnName);
+            
+            const filledCount = currentData.filter(row => row[cevapColumnName] && row[cevapColumnName].toString().trim()).length;
+            const emptyCount = currentData.length - filledCount;
+            
+            // Detaylı analizi console'a gönder (kullanıcıdan gizli)
+            console.log('🔍 Sütun Analizi:', columnNames.map((col, idx) => ({
+                index: idx + 1,
+                name: col,
+                sample: currentData[0][col]?.toString().substring(0, 30) + '...'
+            })));
+            
+            // Kullanıcıya basit bilgi göster
+            let testResults = '<div class="alert alert-success">';
+            testResults += '<h6><i class="fas fa-check-circle me-2"></i>Excel Verileri Hazır!</h6>';
+            testResults += `<div class="row">`;
+            testResults += `<div class="col-md-4"><strong>Toplam Soru:</strong> ${currentData.length}</div>`;
+            testResults += `<div class="col-md-4"><strong>Dolu Cevap:</strong> <span class="text-success">${filledCount}</span></div>`;
+            testResults += `<div class="col-md-4"><strong>Boş Cevap:</strong> <span class="text-warning">${emptyCount}</span></div>`;
+            testResults += `</div>`;
+            testResults += '<hr>';
+            testResults += `<p><i class="fas fa-info-circle me-2"></i><strong>Cevap Sütunu:</strong> <code>${cevapColumnName}</code></p>`;
+            testResults += '<p class="mb-0"><i class="fas fa-rocket me-2"></i><strong>Veriler yapıştırılmaya hazır!</strong> KOPYALA butonuna basabilirsiniz.</p>';
+            testResults += '</div>';
+            
+            $('#mappingContainer').html(testResults);
+            $('#mappingSection').show();
+            
+            // Scroll to mapping section
+            document.getElementById('mappingSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function copyDataToClipboard() {
+            if (!currentData || currentData.length === 0) {
+                alert('Önce Excel verilerini yükleyin!');
+                return;
+            }
+
+            // Debug: Sütun kontrolü ve veri analizi
+            const firstRowKeys = Object.keys(currentData[0]);
+            console.log('🔍 Kopyalama sırasında sütunlar:', firstRowKeys);
+            console.log('📊 Tüm sütun örnekleri:');
+            firstRowKeys.forEach((key, index) => {
+                const value = currentData[0][key] || '';
+                const displayValue = value.toString().length > 50 
+                    ? value.toString().substring(0, 50) + '...' 
+                    : value.toString();
+                console.log(`   ${index + 1}. "${key}": "${displayValue}"`);
+            });
+            
+            // Şu anda hangi sütunu cevap olarak alıyor kontrol et
+            console.log('📋 Şu anda 4. sütun (index 3) alınıyor:', firstRowKeys[3]);
+            console.log('💾 Bu sütunun değeri:', currentData[0][firstRowKeys[3]]);
+
+            // Clipboard için özel format oluştur
+            const clipboardData = {
+                type: 'ExcelPasteData_Bolum1',
+                version: '1.0',
+                timestamp: new Date().toISOString(),
+                data: currentData,
+                headers: currentHeaders,
+                mapping: 'ContentPlaceHolder1_txtsoru{N}aciklama',
+                count: currentData.length,
+                debug: {
+                    columnNames: firstRowKeys,
+                    answerColumn: firstRowKeys[3],
+                    sampleAnswer: currentData[0][firstRowKeys[3]]
+                }
+            };
+
+            const jsonData = JSON.stringify(clipboardData, null, 2);
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(jsonData).then(() => {
+                    showClipboardSuccess();
+                }).catch(() => {
+                    fallbackCopy(jsonData);
+                });
+            } else {
+                fallbackCopy(jsonData);
+            }
+        }
+
+        function showClipboardSuccess() {
+            const btn = $('#copyToClipboardBtn');
+            const originalHtml = btn.html();
+            
+            btn.html('<i class="fas fa-check me-2"></i>✅ KOPYALANDİ!');
+            btn.removeClass('btn-outline-success').addClass('btn-success');
+            
+            setTimeout(() => {
+                btn.html(originalHtml);
+                btn.removeClass('btn-success').addClass('btn-outline-success');
+            }, 3000);
+        }
+
+        function fallbackCopy(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                showClipboardSuccess();
+            } catch (err) {
+                alert('Kopyalama başarısız oldu. Manuel olarak kopyalayın.');
+            }
+            
+            document.body.removeChild(textArea);
+        }
+
+        function showScriptCode() {
+            const scriptCode = `// MEB Excel Yapıştırıcı - Basit ve Güvenilir Script
+var script = document.createElement('script');
+script.src = '${window.location.origin}/js/paste-listener.js';
+document.head.appendChild(script);
+
+console.log('✅ Excel Yapıştırıcı yüklendi!');
+console.log('📋 Şimdi Ctrl+V ile Excel verilerini yapıştırabilirsiniz.');
+
+setTimeout(() => {
+    const textareas = document.querySelectorAll('textarea[id*="ContentPlaceHolder1_txtsoru"]');
+    console.log('🔍 Bulunan textarea sayısı: ' + textareas.length);
+    
+    if (textareas.length > 0) {
+        console.log('✅ MEB form sayfası tespit edildi!');
+    } else {
+        console.warn('⚠️ MEB form sayfası tespit edilemedi.');
+    }
+}, 1000);`;
+
+            document.getElementById('scriptCode').value = scriptCode;
+            $('#scriptModal').modal('show');
+        }
+
+        function copyScriptCode() {
+            const scriptCode = document.getElementById('scriptCode');
+            scriptCode.select();
+            
+            try {
+                document.execCommand('copy');
+                alert('Script kodu kopyalandı! MEB sayfasında F12 → Console → Yapıştır → Enter');
+            } catch (err) {
+                alert('Kopyalama başarısız. Manuel olarak kopyalayın.');
+            }
+        }
+
+        function openMEBPage() {
+            const mebUrl = 'https://merkezisgb.meb.gov.tr/belgelendirme/OtbPortal/tetkikgorevlisi/raporguncellebolum1.aspx';
+            window.open(mebUrl, '_blank');
+        }
+    </script>
+}

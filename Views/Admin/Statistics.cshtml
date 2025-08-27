@@ -1,0 +1,237 @@
+@model ExcelProcessor.Models.StatisticsViewModel
+@{
+    ViewData["Title"] = "İstatistikler";
+    Layout = "_AdminLayout";
+}
+
+<div class="row">
+    <!-- Özet Kartları -->
+    <div class="col-md-3 mb-4">
+        <div class="card bg-gradient-primary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="card-title">Toplam Kullanıcı</h6>
+                        <h2>@Model.TotalUsers</h2>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-users fa-3x opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-4">
+        <div class="card bg-gradient-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="card-title">Aktif Kullanıcılar</h6>
+                        <h2>@Model.ActiveUsers</h2>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-user-check fa-3x opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-4">
+        <div class="card bg-gradient-warning text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="card-title">Admin Kullanıcılar</h6>
+                        <h2>@Model.AdminUsers</h2>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-user-shield fa-3x opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-4">
+        <div class="card bg-gradient-info text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="card-title">Bugün</h6>
+                        <h2>@DateTime.Now.Day</h2>
+                        <small>@DateTime.Now.ToString("MMMM yyyy")</small>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-calendar fa-3x opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Kullanıcı Kayıt Grafiği -->
+    <div class="col-lg-8 mb-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>Aylık Kullanıcı Kayıtları</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="registrationChart" height="400"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Son Kayıt Olan Kullanıcılar -->
+    <div class="col-lg-4 mb-4">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-user-plus me-2"></i>Son Kayıtlar</h5>
+            </div>
+            <div class="card-body">
+                @foreach (var user in Model.RecentUsers)
+                {
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="me-3">
+                            <i class="fas @(user.IsAdmin ? "fa-user-shield text-danger" : "fa-user text-primary") fa-2x"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="fw-bold">@user.Username</div>
+                            <small class="text-muted">@user.CreatedDate.ToString("dd.MM.yyyy HH:mm")</small>
+                        </div>
+                        <div>
+                            @if (user.IsAdmin)
+                            {
+                                <span class="badge bg-danger">Admin</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-primary">User</span>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Sistem Performans -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="fas fa-server me-2"></i>Sistem Performansı</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>CPU Kullanımı</span>
+                        <span>45%</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-success" style="width: 45%"></div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>Bellek Kullanımı</span>
+                        <span>62%</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-warning" style="width: 62%"></div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>Disk Kullanımı</span>
+                        <span>38%</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-info" style="width: 38%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Hızlı İşlemler -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0"><i class="fas fa-bolt me-2"></i>Hızlı İşlemler</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <button class="btn btn-outline-primary">
+                        <i class="fas fa-user-plus me-2"></i>Yeni Kullanıcı Ekle
+                    </button>
+                    <button class="btn btn-outline-success">
+                        <i class="fas fa-download me-2"></i>Sistem Raporu İndir
+                    </button>
+                    <button class="btn btn-outline-warning">
+                        <i class="fas fa-broom me-2"></i>Sistem Temizle
+                    </button>
+                    <button class="btn btn-outline-info">
+                        <i class="fas fa-sync me-2"></i>Önbelleği Temizle
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Kullanıcı kayıt grafiği
+            const ctx = document.getElementById('registrationChart').getContext('2d');
+            
+            // Sample data - dinamik data için backend'den gelen veri
+            const registrationData = {
+                'Jan 2024': 2,
+                'Feb 2024': 1,
+                'Mar 2024': 3,
+                'Apr 2024': 0,
+                'May 2024': 1,
+                'Jun 2024': 0
+            };
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Object.keys(registrationData),
+                    datasets: [{
+                        label: 'Yeni Kayıtlar',
+                        data: Object.values(registrationData),
+                        borderColor: 'rgb(75, 192, 192)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        tension: 0.1,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}

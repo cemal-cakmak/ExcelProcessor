@@ -1,0 +1,253 @@
+@model ExcelProcessor.Models.SystemSettingsViewModel
+@{
+    ViewData["Title"] = "Sistem Ayarları";
+    Layout = "_AdminLayout";
+}
+
+<div class="row">
+    <!-- Genel Ayarlar -->
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-cogs me-2"></i>Sistem Ayarları</h5>
+            </div>
+            <div class="card-body">
+                <form>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="appName" class="form-label">Uygulama Adı</label>
+                            <input type="text" class="form-control" id="appName" value="@Model.ApplicationName">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="appVersion" class="form-label">Versiyon</label>
+                            <input type="text" class="form-control" id="appVersion" value="@Model.Version" readonly>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="maxFileSize" class="form-label">Maksimum Dosya Boyutu</label>
+                            <select class="form-select" id="maxFileSize">
+                                <option value="5">5 MB</option>
+                                <option value="10" selected>10 MB</option>
+                                <option value="25">25 MB</option>
+                                <option value="50">50 MB</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="sessionTimeout" class="form-label">Oturum Süresi</label>
+                            <select class="form-select" id="sessionTimeout">
+                                <option value="15">15 dakika</option>
+                                <option value="30" selected>30 dakika</option>
+                                <option value="60">1 saat</option>
+                                <option value="120">2 saat</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="allowedTypes" class="form-label">İzin Verilen Dosya Türleri</label>
+                        <input type="text" class="form-control" id="allowedTypes" value="@Model.AllowedFileTypes">
+                        <small class="form-text text-muted">Virgülle ayırarak yazın (örn: .xlsx, .xls)</small>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="enableLogging" checked>
+                                <label class="form-check-label" for="enableLogging">
+                                    Log Kaydı Aktif
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="enableRegistration">
+                                <label class="form-check-label" for="enableRegistration">
+                                    Yeni Kullanıcı Kaydına İzin Ver
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+                    
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-secondary me-2">Sıfırla</button>
+                        <button type="button" class="btn btn-primary">Kaydet</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Güvenlik Ayarları -->
+        <div class="card mt-4">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0"><i class="fas fa-shield-alt me-2"></i>Güvenlik Ayarları</h5>
+            </div>
+            <div class="card-body">
+                <form>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="minPasswordLength" class="form-label">Minimum Şifre Uzunluğu</label>
+                            <input type="number" class="form-control" id="minPasswordLength" value="6" min="4" max="20">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="maxLoginAttempts" class="form-label">Maksimum Giriş Denemesi</label>
+                            <input type="number" class="form-control" id="maxLoginAttempts" value="5" min="3" max="10">
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="requireStrongPassword">
+                                <label class="form-check-label" for="requireStrongPassword">
+                                    Güçlü Şifre Zorunlu
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="enableTwoFactor">
+                                <label class="form-check-label" for="enableTwoFactor">
+                                    İki Faktörlü Kimlik Doğrulama
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+                    
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-warning">Güvenlik Ayarlarını Kaydet</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sistem Bilgileri -->
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Sistem Bilgileri</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <strong>Sunucu Zamanı:</strong><br>
+                    <span id="serverTime">@DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss")</span>
+                </div>
+                
+                <div class="mb-3">
+                    <strong>Çalışma Süresi:</strong><br>
+                    <span class="text-success">2 gün 14 saat</span>
+                </div>
+                
+                <div class="mb-3">
+                    <strong>Framework:</strong><br>
+                    ASP.NET Core 8.0
+                </div>
+                
+                <div class="mb-3">
+                    <strong>Veritabanı:</strong><br>
+                    SQLite
+                </div>
+                
+                <div class="mb-3">
+                    <strong>Son Güncelleme:</strong><br>
+                    @DateTime.Now.ToString("dd.MM.yyyy")
+                </div>
+                
+                <hr>
+                
+                <div class="mb-3">
+                    <strong>Disk Kullanımı:</strong>
+                    <div class="progress mt-2">
+                        <div class="progress-bar bg-info" style="width: 45%">45%</div>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <strong>Bellek Kullanımı:</strong>
+                    <div class="progress mt-2">
+                        <div class="progress-bar bg-warning" style="width: 68%">68%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hızlı İşlemler -->
+        <div class="card mt-4">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-bolt me-2"></i>Hızlı İşlemler</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <button class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-sync me-2"></i>Sistemi Yeniden Başlat
+                    </button>
+                    <button class="btn btn-outline-warning btn-sm">
+                        <i class="fas fa-broom me-2"></i>Önbelleği Temizle
+                    </button>
+                    <button class="btn btn-outline-info btn-sm">
+                        <i class="fas fa-download me-2"></i>Ayarları Dışa Aktar
+                    </button>
+                    <button class="btn btn-outline-success btn-sm">
+                        <i class="fas fa-upload me-2"></i>Ayarları İçe Aktar
+                    </button>
+                    <button class="btn btn-outline-danger btn-sm">
+                        <i class="fas fa-exclamation-triangle me-2"></i>Fabrika Ayarları
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Server time update
+            setInterval(function() {
+                const now = new Date();
+                const timeString = now.toLocaleString('tr-TR');
+                $('#serverTime').text(timeString);
+            }, 1000);
+
+            // Settings save confirmation
+            $('.btn-primary, .btn-warning').on('click', function() {
+                const settingsType = $(this).text().includes('Güvenlik') ? 'Güvenlik ayarları' : 'Sistem ayarları';
+                
+                // Show success message
+                const alertHtml = `
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="fas fa-check-circle me-2"></i>${settingsType} başarıyla kaydedildi!
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                `;
+                
+                $(this).closest('.card').prepend(alertHtml);
+                
+                // Auto dismiss after 3 seconds
+                setTimeout(function() {
+                    $('.alert').fadeOut();
+                }, 3000);
+            });
+
+            // Reset button
+            $('.btn-secondary').on('click', function() {
+                if (confirm('Tüm ayarları varsayılan değerlere sıfırlamak istediğinize emin misiniz?')) {
+                    location.reload();
+                }
+            });
+
+            // Quick actions
+            $('.card-body .btn-outline-danger').on('click', function() {
+                if (confirm('Sistem fabrika ayarlarına döndürülecek! Bu işlem geri alınamaz. Devam etmek istediğinize emin misiniz?')) {
+                    alert('Bu özellik henüz aktif değil.');
+                }
+            });
+        });
+    </script>
+}

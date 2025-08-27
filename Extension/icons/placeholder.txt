@@ -1,0 +1,3 @@
+# Icon placeholder
+# Bu dosya icon klasörünü oluşturmak için geçici dosyadır
+# Gerçek icon dosyaları sonra eklenecek

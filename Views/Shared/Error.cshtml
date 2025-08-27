@@ -1,0 +1,28 @@
+@model ErrorViewModel
+@{
+    ViewData["Title"] = "Hata";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body text-center">
+                <h1 class="text-danger">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Hata
+                </h1>
+                <p class="lead">Bir hata oluştu. Lütfen daha sonra tekrar deneyin.</p>
+                
+                @if (Model.ShowRequestId)
+                {
+                    <p class="text-muted">
+                        <strong>İstek ID:</strong> <code>@Model.RequestId</code>
+                    </p>
+                }
+                
+                <a asp-action="Index" asp-controller="Home" class="btn btn-primary">
+                    <i class="fas fa-home me-2"></i>Ana Sayfaya Dön
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
