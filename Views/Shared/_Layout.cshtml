@@ -8,6 +8,198 @@
     <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    
+    <!-- Adım 1 Modern Stiller -->
+    <style>
+        /* Template Card */
+        .template-card {
+            border-radius: 20px;
+            min-height: 300px;
+        }
+        
+        .template-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            border-radius: 20px;
+        }
+        
+        @@keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        /* Step Badge */
+        .step-badge-modern {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .step-circle {
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .step-num {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            z-index: 2;
+        }
+        
+        .step-circle::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            animation: pulse 3s ease-in-out infinite;
+        }
+        
+        .step-icon-wrapper {
+            position: relative;
+        }
+        
+        .step-icon-animated {
+            font-size: 2rem;
+            color: white;
+            animation: bounce 2s ease-in-out infinite;
+        }
+        
+        @@keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+        
+        @@keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        /* Column Preview */
+        .column-preview {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .column-preview:hover {
+            background: rgba(255,255,255,0.2) !important;
+            transform: translateY(-3px);
+        }
+        
+        .transition-hover {
+            transition: all 0.3s ease;
+        }
+        
+        /* Download Button */
+        .download-button-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .btn-download-modern {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(255,255,255,0.15);
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 15px;
+            padding: 1rem 1.5rem;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .btn-download-modern:hover {
+            background: rgba(255,255,255,0.25);
+            border-color: rgba(255,255,255,0.5);
+            transform: translateY(-2px);
+            color: white;
+            text-decoration: none;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        .btn-icon {
+            font-size: 1.5rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .btn-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+            display: block;
+        }
+        
+        .btn-subtitle {
+            opacity: 0.8;
+            font-size: 0.85rem;
+        }
+        
+        .download-ring {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            animation: rotate 10s linear infinite;
+            z-index: 1;
+        }
+        
+        @@keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Info Items */
+        .info-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Responsive */
+        @@media (max-width: 768px) {
+            .template-card {
+                min-height: auto;
+            }
+            
+            .step-badge-modern {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .btn-download-modern {
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: center;
+            }
+            
+            .btn-icon {
+                font-size: 2rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <header>

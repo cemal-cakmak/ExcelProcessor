@@ -3,53 +3,90 @@
     ViewData["Title"] = "Ana Sayfa";
 }
 
-<!-- 1. Excel Şablonu İndirme Bölümü -->
+<!-- 1. Excel Şablonu İndirme Bölümü - Enhanced -->
 <div class="row mb-4">
     <div class="col-12">
-        <div class="card shadow-sm border-0" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-            <div class="card-body text-white p-4">
+        <div class="card shadow-lg border-0 template-card position-relative overflow-hidden">
+            <!-- Animated background -->
+            <div class="template-bg"></div>
+            
+            <div class="card-body text-white p-4 position-relative" style="z-index: 2;">
                 <div class="row align-items-center">
-                    <div class="col-md-8">
-                        <div class="d-flex align-items-center mb-3">
-                            <div class="bg-white bg-opacity-25 rounded-circle p-3 me-3">
-                                <i class="fas fa-download fa-2x text-white"></i>
+                    <div class="col-lg-8 col-md-7">
+                        <div class="d-flex align-items-center mb-4 flex-column flex-sm-row text-center text-sm-start">
+                            <div class="step-badge-modern me-sm-4 mb-3 mb-sm-0">
+                                <div class="step-circle">
+                                    <span class="step-num">1</span>
+                                </div>
+                                <div class="step-icon-wrapper">
+                                    <i class="fas fa-download step-icon-animated"></i>
+                                </div>
                             </div>
                             <div>
-                                <h3 class="mb-1 fw-bold">Adım 1: Excel Şablonu</h3>
-                                <p class="mb-0 opacity-75">Önce şablonu indirin ve verilerinizi girin</p>
+                                <h2 class="mb-2 fw-bold display-6">Excel Şablonu</h2>
+                                <p class="mb-0 opacity-75 lead">Önce şablonu indirin ve verilerinizi girin</p>
                             </div>
                         </div>
                         
-                        <div class="bg-white bg-opacity-15 rounded p-3 mb-3">
-                            <div class="row text-center">
-                                <div class="col-3">
-                                    <i class="fas fa-hashtag text-warning"></i>
-                                    <small class="d-block">Soru No</small>
+                        <div class="template-preview bg-white bg-opacity-15 rounded-3 p-3 mb-3">
+                            <h5 class="fw-bold mb-3 text-center">
+                                <i class="fas fa-table me-2"></i>Şablon Yapısı
+                            </h5>
+                            <div class="row g-2">
+                                <div class="col-6 col-sm-3">
+                                    <div class="column-preview text-center p-2 rounded-2 bg-white bg-opacity-10 transition-hover">
+                                        <i class="fas fa-hashtag text-warning fa-lg mb-2"></i>
+                                        <small class="d-block fw-semibold">Soru No</small>
+                                    </div>
                                 </div>
-                                <div class="col-3">
-                                    <i class="fas fa-question-circle text-info"></i>
-                                    <small class="d-block">Sorular</small>
+                                <div class="col-6 col-sm-3">
+                                    <div class="column-preview text-center p-2 rounded-2 bg-white bg-opacity-10 transition-hover">
+                                        <i class="fas fa-question-circle text-info fa-lg mb-2"></i>
+                                        <small class="d-block fw-semibold">Sorular</small>
+                                    </div>
                                 </div>
-                                <div class="col-3">
-                                    <i class="fas fa-edit text-success"></i>
-                                    <small class="d-block">Cevaplar</small>
+                                <div class="col-6 col-sm-3">
+                                    <div class="column-preview text-center p-2 rounded-2 bg-white bg-opacity-10 transition-hover">
+                                        <i class="fas fa-edit text-success fa-lg mb-2"></i>
+                                        <small class="d-block fw-semibold">Cevaplar</small>
+                                    </div>
                                 </div>
-                                <div class="col-3">
-                                    <i class="fas fa-check-circle text-light"></i>
-                                    <small class="d-block">Evet/Hayır</small>
+                                <div class="col-6 col-sm-3">
+                                    <div class="column-preview text-center p-2 rounded-2 bg-white bg-opacity-10 transition-hover">
+                                        <i class="fas fa-check-circle text-light fa-lg mb-2"></i>
+                                        <small class="d-block fw-semibold">Evet/Hayır</small>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="col-md-4 text-center">
-                        <a href="/Home/DownloadTemplate" class="btn btn-light btn-lg px-4 py-3 shadow">
-                            <i class="fas fa-download me-2 text-primary"></i>
-                            <span class="fw-bold text-dark">Şablonu İndir</span>
-                        </a>
-                        <p class="mt-2 mb-0 small opacity-75">
-                            <i class="fas fa-file-excel me-1"></i>Excel formatında
-                        </p>
+                    <div class="col-lg-4 col-md-5 text-center">
+                        <div class="download-section">
+                            <div class="download-button-wrapper mb-3">
+                                <a href="/Home/DownloadTemplate" class="btn-download-modern">
+                                    <div class="btn-icon">
+                                        <i class="fas fa-download"></i>
+                                    </div>
+                                    <div class="btn-text">
+                                        <span class="btn-title">Şablonu İndir</span>
+                                        <small class="btn-subtitle">Excel formatında</small>
+                                    </div>
+                                </a>
+                                <div class="download-ring"></div>
+                            </div>
+                            
+                            <div class="download-info">
+                                <div class="info-item">
+                                    <i class="fas fa-file-excel text-success me-2"></i>
+                                    <span class="small opacity-75">Excel formatında</span>
+                                </div>
+                                <div class="info-item mt-1">
+                                    <i class="fas fa-info-circle text-info me-2"></i>
+                                    <span class="small opacity-75">Hazır şablon</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
